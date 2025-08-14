@@ -1,0 +1,9 @@
+# L1 限定自動の安全枠（エージェントはこの範囲のみ自動変更可）
+limits:
+  threshold_pct: 15       # 閾値変更は ±15% まで
+  for_add_minutes: 5      # for は +5分まで（短縮は不可）
+  rpm_slowdown_pct: 20    # 発注間隔/スロットリングの増加は最大 +20%
+  hourly_changes: 2       # 1時間あたり自動変更は 2 件まで
+  ttl_minutes: 60         # 自動変更の有効期限（TTL）
+  business_hours_only: true  # 営業時間内のみ自動
+  freeze_on_events: true     # 大型イベント前は自動停止
