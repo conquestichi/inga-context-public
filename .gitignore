@@ -1,0 +1,7 @@
+# 実行系の状態物/秘密は含めない
+*.db
+*.tgz
+.env
+memory/
+records/
+grafana.db

@@ -1,0 +1,11 @@
+groups:
+- name: inkritsu
+  rules:
+  - alert: NoScrape5m
+    expr: min_over_time(up{job="inkaritsu_webhook"}[5m]) < 1
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "No scrape for 5m"
+      description: "Prometheus cannot scrape webhook for 5 minutes."

@@ -1,0 +1,23 @@
+global:
+  resolve_timeout: 2m
+
+route:
+  receiver: 'slack-default'
+  routes:
+  - matchers: [ severity="critical" ]
+    receiver: 'slack-error'
+
+receivers:
+- name: 'slack-default'
+  slack_configs:
+  - api_url: 'https://hooks.slack.com/services/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'
+    send_resolved: true
+    title: '{{ .CommonAnnotations.summary }}'
+    text:  '{{ range .Alerts }}{{ .Annotations.description }} | labels={{ .Labels }}{{ "\n" }}{{ end }}'
+
+- name: 'slack-error'
+  slack_configs:
+  - api_url: 'https://hooks.slack.com/services/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'
+    send_resolved: true
+    title: '{{ .CommonAnnotations.summary }}'
+    text:  '{{ range .Alerts }}{{ .Annotations.description }} | labels={{ .Labels }}{{ "\n" }}{{ end }}'
