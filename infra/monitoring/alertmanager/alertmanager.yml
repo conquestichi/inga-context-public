@@ -35,3 +35,4 @@ receivers:
           *{{ .Labels.alertname }}* ({{ .Labels.severity }})
           {{- if .Annotations.summary }} {{ .Annotations.summary }} {{- else }} no summary {{- end }}
           {{- end }}
+          
