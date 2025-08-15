@@ -1,0 +1,18 @@
+groups:
+  - name: inkaritsu-version
+    rules:
+      - alert: InkaritsuVersionMissing
+        expr: absent(inkaritsu_version_info)
+        for: 10m
+        labels: {severity: warning, service: inkaritsu}
+        annotations:
+          summary: "Version metric missing"
+          description: "inkaritsu_version_info が 10分間観測されていません。"
+
+      - alert: InkaritsuWebhookDown
+        expr: absent(up{job="inkaritsu_webhook"} == 1)
+        for: 2m
+        labels: {severity: critical, service: inkaritsu}
+        annotations:
+          summary: "Webhook down"
+          description: "webhook の up が 2分間 1 ではありません。"
