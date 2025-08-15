@@ -1,0 +1,26 @@
+groups:
+  - name: alertmanager-ops
+    rules:
+      # Alertmanagerがダウン
+      - alert: AlertmanagerDown
+        expr: absent(up{job="alertmanager"} == 1)
+        for: 2m
+        labels: {severity: critical, service: inkaritsu}
+        annotations:
+          summary: "Alertmanager down"
+
+      # 通知失敗カウンタ（5分平均で増えている）
+      - alert: AlertmanagerNotifyFailures
+        expr: rate(alertmanager_notifications_failed_total[5m]) > 0
+        for: 5m
+        labels: {severity: warning, service: inkaritsu}
+        annotations:
+          summary: "Alertmanager notification failures in last 5m"
+
+      # Versionメトリクスの更新停滞（60秒ごと更新が止まった）
+      - alert: InkaritsuVersionStale
+        expr: changes(inkaritsu_version_info[20m]) < 1
+        for: 25m
+        labels: {severity: warning, service: inkaritsu}
+        annotations:
+          summary: "inkaritsu_version_info not refreshed for >20m"
