@@ -17,9 +17,9 @@ groups:
         annotations:
           summary: "Alertmanager notification failures in last 5m"
 
-      # Versionメトリクスの更新停滞（60秒ごと更新が止まった）
       - alert: InkaritsuVersionStale
-        expr: changes(inkaritsu_version_info[20m]) < 1
+      # 20分間のサンプル数を job 単位で合算。1件以上あれば問題なし
+        expr: sum by (job) (count_over_time(inkaritsu_version_info{job="inkaritsu_webhook_version"}[20m])) < 1
         for: 25m
         labels: {severity: warning, service: inkaritsu}
         annotations:
