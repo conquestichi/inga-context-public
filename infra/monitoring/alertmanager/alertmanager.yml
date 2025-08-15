@@ -17,11 +17,11 @@ receivers:
       - api_url_file: /etc/alertmanager/.slack_webhook
         channel: '#alerts'
         send_resolved: true
-        title: '{{ .CommonLabels.severity | toUpper }}: {{ .CommonLabels.alertname }} ({{ .CommonLabels.service | default "inkaritsu" }})'
+        title: '{{ .CommonLabels.severity | toUpper }}: {{ .CommonLabels.alertname }} ({{ .CommonLabels.service }})'
         text: |-
           {{- range .Alerts }}
           *{{ .Labels.alertname }}* ({{ .Labels.severity }})
-          {{ .Annotations.summary | default "no summary" }}
+          {{- if .Annotations.summary }} {{ .Annotations.summary }} {{- else }} no summary {{- end }}
           {{- end }}
 
   - name: slack-error
@@ -29,9 +29,9 @@ receivers:
       - api_url_file: /etc/alertmanager/.slack_webhook_error
         channel: '#alerts-critical'
         send_resolved: true
-        title: '{{ .CommonLabels.severity | toUpper }}: {{ .CommonLabels.alertname }} ({{ .CommonLabels.service | default "inkaritsu" }})'
+        title: '{{ .CommonLabels.severity | toUpper }}: {{ .CommonLabels.alertname }} ({{ .CommonLabels.service }})'
         text: |-
           {{- range .Alerts }}
           *{{ .Labels.alertname }}* ({{ .Labels.severity }})
-          {{ .Annotations.summary | default "no summary" }}
+          {{- if .Annotations.summary }} {{ .Annotations.summary }} {{- else }} no summary {{- end }}
           {{- end }}
