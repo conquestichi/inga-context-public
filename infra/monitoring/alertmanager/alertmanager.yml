@@ -14,25 +14,18 @@ route:
 receivers:
   - name: slack-default
     slack_configs:
-      - api_url_file: /etc/alertmanager/.slack_webhook
-        channel: '#alerts'
+      - api_url_file: /var/lib/prometheus/alertmanager/.slack_webhook
         send_resolved: true
-        title: '{{ .CommonLabels.severity | toUpper }}: {{ .CommonLabels.alertname }} ({{ .CommonLabels.service }})'
-        text: |-
-          {{- range .Alerts }}
-          *{{ .Labels.alertname }}* ({{ .Labels.severity }})
-          {{- if .Annotations.summary }} {{ .Annotations.summary }} {{- else }} no summary {{- end }}
-          {{- end }}
+        channel: '#alerts'
+        username: 'AM'
+        title: 'ALERT: {{ .CommonLabels.alertname }} ({{ .CommonLabels.severity }})'
+        text:  'service={{ .CommonLabels.service }}'
 
   - name: slack-error
     slack_configs:
-      - api_url_file: /etc/alertmanager/.slack_webhook_error
-        channel: '#alerts-critical'
+      - api_url_file: /var/lib/prometheus/alertmanager/.slack_webhook_error
         send_resolved: true
-        title: '{{ .CommonLabels.severity | toUpper }}: {{ .CommonLabels.alertname }} ({{ .CommonLabels.service }})'
-        text: |-
-          {{- range .Alerts }}
-          *{{ .Labels.alertname }}* ({{ .Labels.severity }})
-          {{- if .Annotations.summary }} {{ .Annotations.summary }} {{- else }} no summary {{- end }}
-          {{- end }}
-          
+        channel: '#alerts-critical'
+        username: 'AM'
+        title: 'ALERT: {{ .CommonLabels.alertname }} ({{ .CommonLabels.severity }})'
+        text:  'service={{ .CommonLabels.service }}'
