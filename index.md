@@ -1,0 +1,15 @@
+---
+title: INDEX
+owner: ops
+updated: 2025-09-14T13:30:15Z
+---
+- [ARCHITECTURE](./ARCHITECTURE.md)
+- [AGENTS](./AGENTS.md)
+- [TARGETS](./TARGETS.md)
+- [POINTERS](./POINTERS.md)
+
+Runbooks:
+- [git-autopush-recover](./RUNBOOKS/git-autopush-recover.md)
+- [queue-healthcheck](./RUNBOOKS/queue-healthcheck.md)
+- [deploy-key-rotate](./RUNBOOKS/deploy-key-rotate.md)
+
