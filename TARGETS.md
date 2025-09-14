@@ -1,7 +1,7 @@
 ---
 title: Targets / SLO
 owner: ops
-updated: 2025-09-14T17:00:01Z
+updated: 2025-09-14T17:30:10Z
 ---
 Expected
 - full auto from HUB .content to Runner; no manual steps

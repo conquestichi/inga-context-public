@@ -1,7 +1,7 @@
 ---
 title: Pointers
 owner: ops
-updated: 2025-09-14T17:00:01Z
+updated: 2025-09-14T17:30:10Z
 ---
 - VPS env : /root/inkaritsu/config/inkaritsu.env
 - Handoff : /root/inkaritsu/docs/ops_handoff_memory.md

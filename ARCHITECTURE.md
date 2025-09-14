@@ -1,7 +1,7 @@
 ---
 title: Architecture
 owner: ops
-updated: 2025-09-14T17:00:01Z
+updated: 2025-09-14T17:30:10Z
 ---
 - hub2queue : HUB .content -> agent_queue/pending/*.json
 - ctx2queue : .context/*.md -> .content (push into HUB)
