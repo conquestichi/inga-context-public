@@ -1,0 +1,10 @@
+2025-09-14T23:40:00Z PASS cmd curl
+2025-09-14T23:40:00Z WARN slack hook missing
+2025-09-14T23:40:00Z PASS dir /root/inkaritsu/memory/webhook_payloads
+2025-09-14T23:40:00Z PASS dir /root/inkaritsu/memory/replay_quarantine
+2025-09-14T23:40:00Z PASS dir /root/inkaritsu/memory/replay_processed
+2025-09-14T23:40:00Z PASS dir /root/inkaritsu/logs
+2025-09-14T23:40:00Z PASS inkaritsu 8081
+2025-09-14T23:40:00Z PASS ritsu 8181
+2025-09-14T23:40:00Z PASS kogane 8282
+code=0 pass=4 warn=1 err=0
