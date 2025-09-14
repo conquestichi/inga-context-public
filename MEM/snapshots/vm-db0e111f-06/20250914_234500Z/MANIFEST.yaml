@@ -1,0 +1,5 @@
+host: "vm-db0e111f-06"
+utc: "20250914_234500Z"
+note: "mem snapshot"
+paths:
+  notes: "notes.txt"
