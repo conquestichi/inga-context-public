@@ -1,6 +1,6 @@
 title: TBX_ENV_PUBLIC (public snapshot)
 owner: ops
-updated: 2025-09-15T00:34:59Z
+updated: 2025-09-15T00:50:45Z
 tags: [env, config, public]
 
 ## Public config (credentials omitted)
