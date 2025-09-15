@@ -1,0 +1,30 @@
+---
+title: Architecture
+owner: ops
+updated: 2025-09-15T02:00:17Z
+---
+- hub2queue : HUB .content -> agent_queue/pending/*.json
+- ctx2queue : .context/*.md -> .content (push into HUB)
+- agent_runner : apply pending/*.json (done/failed)
+- autopull/push : GitHub sync via deploy key (ed25519)
+- digest : snapshots/health/ops
+
+Paths
+- Hub incoming : /root/inkaritsu/memory/hub_jobs/incoming
+- Agent queue  : /root/inga-control/agent_queue/{pending,processing,done,failed}
+- Repo context : /root/inga-control/.context
+- Mirror       : /root/inga-control/files/inkaritsu/memory/context
+
+Units/Timers
+- inkaritsu-hub2queue.path /.service
+- inkaritsu-ctx2queue.timer /.service
+- inkaritsu-agent-runner.path /.service
+- inkaritsu-autopull.timer /.service
+- inkaritsu-autopush.timer /.service
+- inkaritsu-digest.timer /.service
+
+Runbooks
+- RUNBOOKS/git-autopush-recover.md
+- RUNBOOKS/queue-healthcheck.md
+- RUNBOOKS/deploy-key-rotate.md
+
