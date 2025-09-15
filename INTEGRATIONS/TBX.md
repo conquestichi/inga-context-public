@@ -1,5 +1,5 @@
 title: TBX (Tachibana Box) integration
-updated: 2025-09-15T00:50:45Z
+updated: 2025-09-15T00:57:14Z
 owner: ops
 tags: [tbx, integration, tachibana, auth, cookies]
 
