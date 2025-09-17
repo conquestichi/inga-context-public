@@ -1,6 +1,6 @@
 title: INKARITSU Trade API (DRY-RUN)
 owner: ops
-updated: STAMP
+updated: 2025-09-17T15:21:23Z
 tags: [trading, inkaritsu, api, webhook]
 
 ## Purpose
@@ -13,7 +13,7 @@ tags: [trading, inkaritsu, api, webhook]
 - **POST** `{BASE}{PFX}/webhook/dev` — 開発用エコー（**Bearer 必須**）
 - **POST** `{BASE}{PFX}/webhook` — 本番面（現在は 401）
 
-Auth: `Authorization: Bearer <token>`  
+Auth: `Authorization: Bearer <token>`
 Content-Type: `application/json`
 
 ## Request JSON (common)
