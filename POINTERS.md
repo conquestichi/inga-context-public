@@ -1,0 +1,1 @@
+- Trade API (DRY-RUN): https://raw.githubusercontent.com/conquestichi/inga-context-public/main/.context/INTEGRATIONS/TRADE_API.md
