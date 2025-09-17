@@ -1,2 +1,0 @@
-
-- Trade API (DRY-RUN): **{RAW_BASE}**/INTEGRATIONS/TRADE_API.md
