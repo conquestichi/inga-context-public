@@ -29,3 +29,19 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 - カナリア適応制御：成功で段階的に拡大（`INK_CANARY_SUCC_GROWTH_PCT`）、失敗で縮小（`INK_CANARY_FAIL_SHRINK_PCT`）＋指数バックオフ（`INK_CANARY_BACKOFF_BASE_SEC`～`_MAX_SEC`）＋ジッター（`INK_CANARY_JITTER_PCT`）。
 - 時間当たりBudget（任意）：`INK_BUDGET_PER_HOUR_QTY`（成功分のみ消費。0=無効）。ファイル `/var/cache/inkaritsu/budget/<symbol>-YYYYMMDDHH.qty`。
 - 既存：銘柄別レート制限 `INK_RATE_MIN_SEC`、失敗時 SAFE 化は従来通り。
+
+### Client API (Python)
+
+最小クライアント `ink_place_order.py`（関数 & CLI）
+
+```text
+place_order(action, symbol, qty, source="codex", dry=True, cancel_id=None, env_path="/root/inkaritsu/config/inkaritsu.env") -> dict
+# returns: {"prefix": "...", "signal": 200, "webhook_dev": 200, "webhook": 401}
+```
+
+- prefix は `["", "/inkaritsu", "/v1", "/api"]` の順で `/webhook/dev` へ `{"ping":"detect"}` を POST して自動決定
+- token は `STRATEGY_WEBHOOK_TOKEN` もしくは `_JWT` を Authorization: Bearer で送信
+- 例:
+```bash
+python3 /root/tools/ink_place_order.py --action buy --symbol 6501.T --qty 1 --source codex --dry true
+```
