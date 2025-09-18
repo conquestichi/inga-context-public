@@ -25,13 +25,8 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-2
-- CLIラッパに `--price-type` / `--tif` / `--client-order-id` を追加（Pythonへ引き渡し）
-- 定期ヘルス（5分）とクイックテストをsystemd timer化（06–23のみ実行）
-- 失敗時のみSlack通知（`INKARITSU_SLACK_WEBHOOK` / `SLACK_WEBHOOK_URL` / `TBX_SLACK_WEBHOOK_URL` のいずれか）
-- Prefix検出は /tmp キャッシュ（TTL=1800秒、`INK_PFX_CACHE`/`INK_PFX_TTL`で調整）
-- 期待値は従来通り：signal=200 / webhook-dev=200 / webhook=401（/webhookは無認証で401が正）
-
-### 追加CLI例
-ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh buy 6501.T 100 --price-type LMT --tif DAY --client-order-id rc2-$(date +%s)
-ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_health_report.sh
+## RC-2.1
+- Prefix検出のキャッシュを永続化：`/var/cache/inkaritsu/pfx`（ENV: `INK_PFX_CACHE`, `INK_PFX_TTL`）
+- 運用補助: `ink_status.sh`（ENV/BASE/Token長/Prefixキャッシュ/Doc RAW/簡易ヘルス/Timers）
+- ログ補助: `ink_health_logs.sh`（journal tail）
+- 既存の期待値は維持：signal=200 / webhook-dev=200 / webhook=401
