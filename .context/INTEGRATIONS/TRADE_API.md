@@ -65,3 +65,4 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_place_cli.sh \
 ```bash
 python3 /root/tools/ink_place_order.py --action buy --symbol 6501.T --qty 1 --source doc --dry true --price-type MKT --tif DAY --client-order-id demo-$(date +%s)
 ```
+# dummy 1758170385
