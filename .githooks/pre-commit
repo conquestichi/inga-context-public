@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# 一時無効化: SKIP_PRECOMMIT=1 git commit ...
+if [[ -n "${SKIP_PRECOMMIT:-}" ]]; then
+  echo "[hook] pre-commit skipped (SKIP_PRECOMMIT)"
+  exit 0
+fi
+
+# POSIX系 RC と干渉しないため固定 ENV のみ使う（必要に応じて参照）
+INK_ENV="${INK_ENV:-/root/inkaritsu/config/inkaritsu.env}"
+
+changed="$(git diff --cached --name-only --diff-filter=ACM)"
+[[ -z "${changed}" ]] && exit 0
+
+# MD の here-doc 取り扱い: deny|warn（既定: deny）
+MODE="${INK_DOC_HEREDOC:-deny}"
+
+fail=0
+while IFS= read -r f; do
+  # テキストのみ対象
+  file "${f}" | grep -qi 'text' || continue
+
+  if [[ "${f}" =~ \.(md|markdown)$ ]]; then
+    if grep -nE '<<[A-Za-z_][A-Za-z0-9_]*' -- "${f}" >/dev/null; then
+      if [[ "${MODE}" == 'deny' ]]; then
+        echo "[hook][WARN] heredoc detected in ${f}"
+        echo "[hook] aborting commit (docs: use 'printf >> file' 方式)"
+        fail=1
+      else
+        echo "[hook][WARN] heredoc detected in ${f} (allowed: MODE=${MODE})"
+      fi
+    fi
+  else
+    # スクリプト/設定類は厳格に禁止
+    if grep -nE '<<[A-Za-z_][A-Za-z0-9_]*' -- "${f}" >/dev/null; then
+      echo "[hook][WARN] heredoc detected in ${f}"
+      echo "[hook] aborting commit (heredoc not allowed)"
+      fail=1
+    fi
+  fi
+done <<< "${changed}"
+
+# 失敗なら終了
+(( fail )) && exit 1
+
+# ステージ済みテキストの CR を除去して再ステージ（安全）
+git diff --cached --name-only --diff-filter=ACM \
+| while IFS= read -r f; do
+    sed -i 's/\r$//' "${f}"
+    git add -- "${f}"
+  done
+
+exit 0

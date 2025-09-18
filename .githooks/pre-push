@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# NOTE: POSIX sh の RC 用 ENV とは衝突させない
+INK_ENV="${INK_ENV:-/root/inkaritsu/config/inkaritsu.env}"
+
+# 手動スキップ
+if [ -n "${SKIP_PREPUSH:-}" ]; then
+  echo "[pre-push] skipped"
+  exit 0
+fi
+
+# 念のため LF 正規化と実行ディレクトリ
+exec < /dev/null
+cd "$(git rev-parse --show-toplevel)"
+
+ok=1
+
+# 軽いヘルス（15s・静音）
+if ! timeout 15s env ENV="$INK_ENV" /root/bin/ink_webhook_health.sh >/dev/null 2>&1; then
+  echo "[pre-push] health failed"
+  ok=0
+fi
+
+# DRY 実行（15s・失敗時ログ表示）
+tmp="$(mktemp)"
+if ! timeout 15s env ENV="$INK_ENV" /root/bin/ink_place_cli.sh \
+      --env-path "$INK_ENV" \
+      --action buy --symbol 6501.T --qty 1 \
+      --source prepush --dry true \
+      --cancel-id "prepush-$(date +%s)" \
+      >"$tmp" 2>&1; then
+  echo "[pre-push] dry-run failed"
+  sed -e 's/^/[pre-push] /' "$tmp" >&2 || true
+  ok=0
+fi
+rm -f "$tmp"
+
+[ "$ok" -eq 1 ] && { echo "[pre-push] OK"; exit 0; } || exit 1
