@@ -1,39 +1,55 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# NOTE: POSIX sh の RC 用 ENV とは衝突させない
-INK_ENV="${INK_ENV:-/root/inkaritsu/config/inkaritsu.env}"
+# ==== settings ====
+INK_ENV=${INK_ENV:-/root/inkaritsu/config/inkaritsu.env}
+HEALTH=/root/bin/ink_webhook_health.sh
+CLI=/root/bin/ink_place_cli.sh
+TIMEOUT_HEALTH=15s
+TIMEOUT_DRYRUN=15s
+SYMBOL=${INK_PREPUSH_SYMBOL:-6501.T}
+QTY=${INK_PREPUSH_QTY:-1}
+SRC=${INK_PREPUSH_SOURCE:-prepush}
+CANCEL_ID="prepush-$(date +%s)"
 
-# 手動スキップ
-if [ -n "${SKIP_PREPUSH:-}" ]; then
-  echo "[pre-push] skipped"
+# スキップ用（必要なときだけ）
+if [[ -n "${SKIP_PREPUSH:-}" ]]; then
+  echo "[pre-push] skipped (SKIP_PREPUSH=1)"
   exit 0
 fi
 
-# 念のため LF 正規化と実行ディレクトリ
-exec < /dev/null
-cd "$(git rev-parse --show-toplevel)"
+timeout_exists() { command -v timeout >/dev/null 2>&1; }
+run_to() {                     # run_to <timeout> <cmd...>
+  if timeout_exists; then timeout "$1" "${@:2}"; else "${@:2}"; fi
+}
 
 ok=1
 
-# 軽いヘルス（15s・静音）
-if ! timeout 15s env ENV="$INK_ENV" /root/bin/ink_webhook_health.sh >/dev/null 2>&1; then
+# 1) health（短時間・静音）
+if ! run_to "$TIMEOUT_HEALTH" env ENV="$INK_ENV" "$HEALTH" >/dev/null 2>&1; then
   echo "[pre-push] health failed"
   ok=0
 fi
 
-# DRY 実行（15s・失敗時ログ表示）
-tmp="$(mktemp)"
-if ! timeout 15s env ENV="$INK_ENV" /root/bin/ink_place_cli.sh \
-      --env-path "$INK_ENV" \
-      --action buy --symbol 6501.T --qty 1 \
-      --source prepush --dry true \
-      --cancel-id "prepush-$(date +%s)" \
-      >"$tmp" 2>&1; then
+# 2) dry-run（詳細ログ）
+tmp="$(mktemp)"; trap 'rm -f "$tmp"' EXIT
+if ! run_to "$TIMEOUT_DRYRUN" env ENV="$INK_ENV" "$CLI" \
+      --action buy --symbol "$SYMBOL" --qty "$QTY" \
+      --source "$SRC" --dry true --cancel-id "$CANCEL_ID" >"$tmp" 2>&1; then
   echo "[pre-push] dry-run failed"
-  sed -e 's/^/[pre-push] /' "$tmp" >&2 || true
+  sed -n '1,120p' "$tmp" >&2   # 失敗時だけ先頭ログを出す
   ok=0
+else
+  sig=$(sed -n 's/.*"signal":[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$tmp" | head -1 || true)
+  wdv=$(sed -n 's/.*"webhook_dev":[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$tmp" | head -1 || true)
+  web=$(sed -n 's/.*"webhook":[[:space:]]*\([0-9][0-9]*\).*/\1/p' "$tmp" | head -1 || true)
+  echo "[pre-push] codes: signal=${sig:-?} webhook_dev=${wdv:-?} webhook=${web:-?}"
 fi
-rm -f "$tmp"
 
-[ "$ok" -eq 1 ] && { echo "[pre-push] OK"; exit 0; } || exit 1
+if [[ $ok -eq 1 ]]; then
+  echo "[pre-push] OK"
+  exit 0
+fi
+
+echo "[pre-push] DENY"
+exit 1
