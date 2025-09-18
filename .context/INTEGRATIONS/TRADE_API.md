@@ -25,8 +25,7 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-3.1
-- 二名承認（可変）：`INK_APPLY_APPROVERS`（既定=2）。`ink_go_live.sh --who <name> [--ttl sec]` で `apply.ok.<name>` を発行。
-- 監査ログ：`/var/log/inkaritsu/apply_audit.jsonl`（注文・ゲート判定・実効DRYを1行JSONで追記）。`ink_apply_audit.sh [N]` で参照。
-- Slack通知（任意）：`INK_APPLY_AUDIT_SLACK=true` で ALLOW/DENY を投稿（Webhookは既存の *INKARITSU_SLACK_WEBHOOK / SLACK_WEBHOOK_URL / TBX_SLACK_WEBHOOK_URL* のいずれか）。
-- ステータス：`ink_go_status.sh` で承認票と残TTL、Kill-switch を一覧。
+## RC-3.2
+- 監査集計：`ink_apply_audit_rollup.py` → `/root/inkaritsu/reports/apply_audit_daily_YYYYMMDD.csv` / `apply_audit_latest.csv`
+- 日次タイマー：`inkaritsu-apply-report.timer`（毎日 23:52 実行、Slackは `INK_APPLY_AUDIT_SLACK=true` で通知）
+- 承認リマインド：`ink_go_remind.sh`（不足票 or TTL間近でSlack通知。`INK_APPLY_REMIND_BEFORE_SEC` と `INK_APPLY_REMIND_COOLDOWN_SEC` で調整）
