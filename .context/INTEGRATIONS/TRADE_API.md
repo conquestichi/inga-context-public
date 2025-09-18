@@ -25,7 +25,7 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-2.2
-- 連続失敗しきい値（`INK_HEALTH_FAIL_THRESHOLD`、既定=3）以上でのみSlack通知
-- 通知クールダウン（`INK_HEALTH_ALERT_COOLDOWN_SEC`、既定=900秒）
-- メトリクスJSONL（`INK_HEALTH_METRICS`、既定=`/var/log/inkaritsu/health.jsonl`）へ永続化
+## RC-2.3
+- SAFE /queue 自動化：`ink_queue_jobs.sh`（8091 `/ready` 確認→JOBSのSHAが変化時のみ `/queue` 投稿、クールダウンあり）
+- queue timer：`inkaritsu-queue.timer`（10分、ENV `INK_QUEUE_HOURS` で運用時間ゲート）
+- メトリクス日次レポート：`ink_health_metrics_report.sh`（成功率・最大streak、`INK_METRICS_REPORT_SLACK=true` でSlack送信）
