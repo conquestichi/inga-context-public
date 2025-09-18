@@ -56,3 +56,12 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_place_cli.sh \
 ```
 
 - 期待応答は `signal=200 / webhook-dev=200 / webhook=401`（本番webhookは認証外で401が正常）
+
+### Client API (Python) — enhanced (price_type / tif / client_order_id)
+
+関数 `place_order(action, symbol, qty, ..., price_type="MKT", tif="DAY", client_order_id=None)`。
+
+#### 例
+```bash
+python3 /root/tools/ink_place_order.py --action buy --symbol 6501.T --qty 1 --source doc --dry true --price-type MKT --tif DAY --client-order-id demo-$(date +%s)
+```
