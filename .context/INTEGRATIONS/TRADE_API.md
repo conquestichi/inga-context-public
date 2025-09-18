@@ -25,7 +25,7 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-2.5
-- メトリクスCSVの GitHub 公開：`ink_metrics_publish.sh`（`reports/metrics/` へ `metrics_daily_YYYYMMDD.csv` と `metrics_latest.csv` を反映）
-- 日次公開タイマー：`inkaritsu-publish.timer`（毎日 23:58 実行）
-- RAW 健全性：`https://raw.githubusercontent.com/<repo>/main/reports/metrics/metrics_latest.csv` が 200 であること
+## RC-2.6
+- ハードニング：`ink_hardening.sh`（ENV=0600、bin/tools perms、トークンは長さのみ表示）
+- Runbook：`ink_runbook.sh`（ENV/BASE/Prefix/Doc RAW/ヘルス/メトリクス/Timers を1ファイル集約）
+- 既存の期待値は維持：signal=200 / webhook-dev=200 / webhook=401
