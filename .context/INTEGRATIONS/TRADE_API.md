@@ -25,7 +25,7 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-2.3
-- SAFE /queue 自動化：`ink_queue_jobs.sh`（8091 `/ready` 確認→JOBSのSHAが変化時のみ `/queue` 投稿、クールダウンあり）
-- queue timer：`inkaritsu-queue.timer`（10分、ENV `INK_QUEUE_HOURS` で運用時間ゲート）
-- メトリクス日次レポート：`ink_health_metrics_report.sh`（成功率・最大streak、`INK_METRICS_REPORT_SLACK=true` でSlack送信）
+## RC-2.4
+- メトリクス日次CSVエクスポート：`ink_metrics_export.py` / `ink_metrics_export.sh`（出力 `/root/inkaritsu/reports/metrics_daily_YYYYMMDD.csv`）
+- 日次タイマー：`inkaritsu-report.timer`（毎日 23:55 実行）
+- 既存の期待値は維持：signal=200 / webhook-dev=200 / webhook=401
