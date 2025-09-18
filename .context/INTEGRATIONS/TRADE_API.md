@@ -25,9 +25,7 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-4
-- **Canary apply**: `ink_apply_canary.sh`（チャンク送信・レート制限・health失敗で即SAFE）
-- **SLO監視**: `ink_apply_slo_check.sh`（window内 失敗率/連続失敗で自動SAFE）。`inkaritsu-apply-slo.timer` が 15分ごとに実行
-- 環境変数（既定値）:  
-  `INK_CANARY_MAX_CHUNK=10` `INK_CANARY_CHUNK_SLEEP_SEC=3` `INK_RATE_MIN_SEC=0`  
-  `INK_SLO_WINDOW_SEC=3600` `INK_SLO_MAX_FAIL_PCT=20` `INK_SLO_MAX_STREAK=3`
+## RC-4.1
+- カナリア適応制御：成功で段階的に拡大（`INK_CANARY_SUCC_GROWTH_PCT`）、失敗で縮小（`INK_CANARY_FAIL_SHRINK_PCT`）＋指数バックオフ（`INK_CANARY_BACKOFF_BASE_SEC`～`_MAX_SEC`）＋ジッター（`INK_CANARY_JITTER_PCT`）。
+- 時間当たりBudget（任意）：`INK_BUDGET_PER_HOUR_QTY`（成功分のみ消費。0=無効）。ファイル `/var/cache/inkaritsu/budget/<symbol>-YYYYMMDDHH.qty`。
+- 既存：銘柄別レート制限 `INK_RATE_MIN_SEC`、失敗時 SAFE 化は従来通り。
