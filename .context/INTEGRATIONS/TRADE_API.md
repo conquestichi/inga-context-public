@@ -25,7 +25,9 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-3.3
-- apply監査CSVの公開：`ink_apply_publish.sh` が `reports/apply/` に `apply_audit_daily_YYYYMMDD.csv` と `apply_audit_latest.csv` を反映（`GITHUB_TOKEN` 必須）。
-- タイマー：`inkaritsu-apply-publish.timer`（毎日 23:59、23:52=集計→23:59=公開）。
-- RAW健全性：`https://raw.githubusercontent.com/<repo>/main/reports/apply/apply_audit_latest.csv` が **200**（初回404は未公開許容、000はネット未疎通）。
+## RC-4
+- **Canary apply**: `ink_apply_canary.sh`（チャンク送信・レート制限・health失敗で即SAFE）
+- **SLO監視**: `ink_apply_slo_check.sh`（window内 失敗率/連続失敗で自動SAFE）。`inkaritsu-apply-slo.timer` が 15分ごとに実行
+- 環境変数（既定値）:  
+  `INK_CANARY_MAX_CHUNK=10` `INK_CANARY_CHUNK_SLEEP_SEC=3` `INK_RATE_MIN_SEC=0`  
+  `INK_SLO_WINDOW_SEC=3600` `INK_SLO_MAX_FAIL_PCT=20` `INK_SLO_MAX_STREAK=3`
