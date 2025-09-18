@@ -45,3 +45,14 @@ place_order(action, symbol, qty, source="codex", dry=True, cancel_id=None, env_p
 ```bash
 python3 /root/tools/ink_place_order.py --action buy --symbol 6501.T --qty 1 --source codex --dry true
 ```
+
+### Client CLI
+
+`ink_place_cli.sh` は `ink_place_order.py` の薄いラッパです。ENVを同梱し、引数透過でCLI利用できます。
+
+```bash
+ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_place_cli.sh \
+  --action buy --symbol 6501.T --qty 1 --source cli --dry true --cancel-id demo-0001
+```
+
+- 期待応答は `signal=200 / webhook-dev=200 / webhook=401`（本番webhookは認証外で401が正常）
