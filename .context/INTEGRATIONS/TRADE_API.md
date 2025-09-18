@@ -25,8 +25,7 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-2.1
-- Prefix検出のキャッシュを永続化：`/var/cache/inkaritsu/pfx`（ENV: `INK_PFX_CACHE`, `INK_PFX_TTL`）
-- 運用補助: `ink_status.sh`（ENV/BASE/Token長/Prefixキャッシュ/Doc RAW/簡易ヘルス/Timers）
-- ログ補助: `ink_health_logs.sh`（journal tail）
-- 既存の期待値は維持：signal=200 / webhook-dev=200 / webhook=401
+## RC-2.2
+- 連続失敗しきい値（`INK_HEALTH_FAIL_THRESHOLD`、既定=3）以上でのみSlack通知
+- 通知クールダウン（`INK_HEALTH_ALERT_COOLDOWN_SEC`、既定=900秒）
+- メトリクスJSONL（`INK_HEALTH_METRICS`、既定=`/var/log/inkaritsu/health.jsonl`）へ永続化
