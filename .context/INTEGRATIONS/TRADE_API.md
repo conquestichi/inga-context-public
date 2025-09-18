@@ -25,13 +25,8 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-3
-- APPLYゲート: `ink_apply_gate.sh`（ENV/承認ファイル/時間帯/数量/銘柄/Kill-switch）
-- 安全ラッパ: `ink_order_apply.sh`（`--apply true`時のみゲート照会。DENY=DRY、ALLOWでも既定は simulate=DRY）
-- 承認/停止: `ink_go_live.sh`（TTL付き承認） / `ink_go_safe.sh`（即停止）
-- ENV（既定安全）: `INK_APPLY=false`, `INK_APPLY_SIM_ONLY=true`, `INK_APPLY_HOURS=09-15`, `INK_APPLY_MAX_QTY=100`, `INK_APPLY_SYMBOLS="6501.T,7203.T,6758.T"`, `INK_APPLY_GO_TTL_SEC=1800`
-### 例（安全な流れ）
-1) 既定はDENY:  
-   `ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order_apply.sh buy 6501.T 1 --apply true --price-type MKT --tif DAY`
-2) （本番化時）ENVで `INK_APPLY=true`/`INK_APPLY_SIM_ONLY=false` を明示＋ `ink_go_live.sh` 実行 → 少量で検証。  
-3) 即停止は `ink_go_safe.sh`。
+## RC-3.1
+- 二名承認（可変）：`INK_APPLY_APPROVERS`（既定=2）。`ink_go_live.sh --who <name> [--ttl sec]` で `apply.ok.<name>` を発行。
+- 監査ログ：`/var/log/inkaritsu/apply_audit.jsonl`（注文・ゲート判定・実効DRYを1行JSONで追記）。`ink_apply_audit.sh [N]` で参照。
+- Slack通知（任意）：`INK_APPLY_AUDIT_SLACK=true` で ALLOW/DENY を投稿（Webhookは既存の *INKARITSU_SLACK_WEBHOOK / SLACK_WEBHOOK_URL / TBX_SLACK_WEBHOOK_URL* のいずれか）。
+- ステータス：`ink_go_status.sh` で承認票と残TTL、Kill-switch を一覧。
