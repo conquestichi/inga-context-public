@@ -25,7 +25,7 @@ ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_order.sh cancel 6501.T 0 
 ## クイックテスト
 ENV=/root/inkaritsu/config/inkaritsu.env /root/bin/ink_trade_quicktest.sh
 
-## RC-3.2
-- 監査集計：`ink_apply_audit_rollup.py` → `/root/inkaritsu/reports/apply_audit_daily_YYYYMMDD.csv` / `apply_audit_latest.csv`
-- 日次タイマー：`inkaritsu-apply-report.timer`（毎日 23:52 実行、Slackは `INK_APPLY_AUDIT_SLACK=true` で通知）
-- 承認リマインド：`ink_go_remind.sh`（不足票 or TTL間近でSlack通知。`INK_APPLY_REMIND_BEFORE_SEC` と `INK_APPLY_REMIND_COOLDOWN_SEC` で調整）
+## RC-3.3
+- apply監査CSVの公開：`ink_apply_publish.sh` が `reports/apply/` に `apply_audit_daily_YYYYMMDD.csv` と `apply_audit_latest.csv` を反映（`GITHUB_TOKEN` 必須）。
+- タイマー：`inkaritsu-apply-publish.timer`（毎日 23:59、23:52=集計→23:59=公開）。
+- RAW健全性：`https://raw.githubusercontent.com/<repo>/main/reports/apply/apply_audit_latest.csv` が **200**（初回404は未公開許容、000はネット未疎通）。
