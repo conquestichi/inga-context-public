@@ -1,0 +1,16 @@
+id: "vm-db0e111f-06-20250919_1410Z"
+host: "vm-db0e111f-06"
+as_of_utc: "20250919_1410Z"
+generator: "hub_snapshot.sh"
+paths:
+  ops_log: "ops.log"
+  errors: "errors.txt"
+  reflect_log: "reflect-log.jsonl"
+  summary_json: "summary.json"
+  latest_notes: "latest-notes.md"
+  health: "health.txt"
+  timers: "timers.txt"
+counters:
+  dlq_json: 33
+  replay_quarantine_json: 33
+  replay_processed_json: 2
