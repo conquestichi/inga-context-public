@@ -38,3 +38,11 @@ ingest → rule → decider → kpi → publish(oneshot) → GitHub
 - 監視: `ink_health_watch.service/timer`（30m）
   - しきい値: `/root/inkaritsu/config/ink_health.env`
   - 通知: Slack（未設定は `/tmp/slack.out`）
+
+## 13. Publish Gate（終了基準）
+- `/root/bin/ink_hub_publish_gate.sh` が実行前に必須ファイルの存在/新鮮さを判定
+- ポリシー: `/root/inkaritsu/config/publish_policy.env`
+  - `PUBLISH_REQUIRED_GLOB` `/root/inkaritsu/reports/*.csv`
+  - `PUBLISH_MIN_COUNT` `1`
+  - `PUBLISH_FRESH_MAX_MIN` `240` (min)
+  - `PUBLISH_IF_EMPTY` `skip|warn|fail`
