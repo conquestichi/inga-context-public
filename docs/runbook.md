@@ -18,3 +18,15 @@
 ■ 変更管理
 - env変更→ink_env_apply.sh→影響サービス再起動
 - commit→SSH push→publish確認
+
+## 通知（最終仕様）
+- 成功：`ink_kpi_notify.sh {daily|weekly} --rich` を ExecStartPost で実行（sink=slack または /tmp/slack.out）
+- 失敗：OnFailure により直近ログを Slack 通知（publish/kpi 共通）
+- メッセージ例：
+[HUB/KPI Daily ✅] as_of=2025-09-22 12:34:56 JST
+files=hub_metrics_daily.json
+sink=slack
+summary=parsed=24 bad_json=0 total=24
+
+bash
+コードをコピーする
