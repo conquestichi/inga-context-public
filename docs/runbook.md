@@ -30,3 +30,20 @@ summary=parsed=24 bad_json=0 total=24
 
 bash
 コードをコピーする
+
+## 運用コマンド（ops.sh）
+/root/bin/ops.sh health # まとめ見
+/root/bin/ops.sh timers # タイマー
+/root/bin/ops.sh push-dry # SSH push の検証
+/root/bin/ops.sh notify-daily # KPI通知（rich）
+/root/bin/ops.sh notify-weekly # KPI通知（rich）
+/root/bin/ops.sh metrics # メトリクスJSONを再生成して表示
+/root/bin/ops.sh health-watch # しきい値監視を即時実行
+/root/bin/ops.sh profile prod|stg# 通知プロファイル切替
+
+markdown
+コードをコピーする
+
+## 監視しきい値（例）
+- `/root/inkaritsu/config/ink_health.env` を編集。単位は秒。
+- 既定: 日次6h / 週次36h / publish6h / guard2h、失敗回数は24hで {2,1,3,3}。

@@ -24,3 +24,17 @@ ingest → rule → decider → kpi → publish(oneshot) → GitHub
 - /root/bin/ink_notify_lib.sh（sink判定）
 - /root/bin/ink_kpi_notify.sh（daily/weekly）
 - /root/inkaritsu/config/ink_notify.env（INK_SLACK_WEBHOOK ほか）
+
+## 12. ヘルス監視 / メトリクス
+- エクスポータ: `/root/bin/ink_metrics_export.sh` → `/root/inkaritsu/reports/hub_metrics_status.json`
+  - last_success / last_failure / 24h 成否 / 経過秒
+- 監視: `ink_health_watch.service/timer`（30m）
+  - しきい値: `/root/inkaritsu/config/ink_health.env`
+  - 通知: Slack（未設定は `/tmp/slack.out`）
+
+## 12. ヘルス監視 / メトリクス
+- エクスポータ: `/root/bin/ink_metrics_export.sh` → `/root/inkaritsu/reports/hub_metrics_status.json`
+  - last_success / last_failure / 24h 成否 / 経過秒
+- 監視: `ink_health_watch.service/timer`（30m）
+  - しきい値: `/root/inkaritsu/config/ink_health.env`
+  - 通知: Slack（未設定は `/tmp/slack.out`）
