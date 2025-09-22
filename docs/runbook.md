@@ -47,3 +47,65 @@ markdown
 ## 監視しきい値（例）
 - `/root/inkaritsu/config/ink_health.env` を編集。単位は秒。
 - 既定: 日次6h / 週次36h / publish6h / guard2h、失敗回数は24hで {2,1,3,3}。
+
+---
+
+## 障害シナリオ別チェックリスト（v0.1）
+
+### A. Git push 拒否 / start-limit-hit
+**一次対応**
+systemctl start ink_git_guard.service
+journalctl -u ink_git_guard.service -n 50 --no-pager
+
+markdown
+コードをコピーする
+
+**復旧ワンライナー（SSH固定化）**
+REPO=/root/work/inga-context-public
+SSH_CMD='ssh -i /root/.ssh/inkhub -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
+git -C "$REPO" config --unset-all http.https://github.com/.extraheader 2>/dev/null || true
+git -C "$REPO" config credential.helper "" || true
+git config --global --unset-all http.https://github.com/.extraheader 2>/dev/null || true
+git config --global --unset-all credential.helper 2>/dev/null || true
+git -C "$REPO" remote set-url origin git@github.com:conquestichi/inga-context-public.git
+install -d -m 700 /root/.ssh && ssh-keyscan -t rsa,ecdsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null || true
+export GIT_SSH_COMMAND="$SSH_CMD"
+
+nginx
+コードをコピーする
+
+### B. publish に CSV が無い/古い
+- Gate: `/root/bin/ink_hub_publish_gate.sh`
+- Policy: `/root/inkaritsu/config/publish_policy.env`
+  - `PUBLISH_FRESH_MAX_MIN`（分）
+  - `PUBLISH_IF_EMPTY=skip|warn|fail`
+
+### C. KPI 未生成
+**確認**
+journalctl -u inkaritsu-kpi-report.service -n 120 --no-pager
+journalctl -u inkaritsu-kpi-weekly.service -n 120 --no-pager
+
+markdown
+コードをコピーする
+**通知**
+- 失敗時は OnFailure で Slack（未設定なら `/tmp/slack.out`）
+
+### D. Slack 来ない / DRY 出力
+tail -n 20 /tmp/slack.out
+ls -l /root/inkaritsu/config/ink_notify.env
+/root/bin/ink_profile.sh prod # or stg
+
+nginx
+コードをコピーする
+
+### E. しきい値アラート（未成功経過/24h失敗回数）
+- env: `/root/inkaritsu/config/ink_health.env`
+- 即時チェック: `/root/bin/ops.sh health-watch`
+- メトリクス: `/root/bin/ops.sh metrics`
+
+### G. 診断パッケージ
+/root/bin/ops.sh diag
+
+例: /root/inkaritsu/reports/YYYYmmdd_HHMMSS_inga_diag.tar.gz
+nginx
+コードをコピーする
