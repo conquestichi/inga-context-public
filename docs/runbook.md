@@ -117,3 +117,16 @@ nginx
 
 nginx
 コードをコピーする
+
+### 失敗通知（OnFailure → Slack）
+- 仕組み: `inkaritsu-failure-notify@.service` + `OnFailure=...@%n.service`
+- 通知先: `INKARITSU_SLACK_WEBHOOK_ERR`（未設定時は通常Webhook、無ければ `/tmp/slack.out`）
+- 直近ログ: `journalctl -u <unit> -n 120` を添付
+- 連投抑止: 既定 600 秒（`COOLDOWN_SEC`）
+
+#### 手動テスト
+MAX_LINES=30 COOLDOWN_SEC=0 /root/bin/ink_failure_notify.sh inkaritsu-hub-publish.service
+tail -n 60 /tmp/slack.out
+
+nginx
+コードをコピーする
