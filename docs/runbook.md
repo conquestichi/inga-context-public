@@ -109,3 +109,11 @@ nginx
 例: /root/inkaritsu/reports/YYYYmmdd_HHMMSS_inga_diag.tar.gz
 nginx
 コードをコピーする
+
+### Publish プロファイル運用
+/root/bin/ops.sh profile-hub stg # publish を stg ブランチへ
+/root/bin/ops.sh push-dry # 反映先ブランチを dry-run で確認
+/root/bin/ops.sh profile-hub prod # 戻す
+
+nginx
+コードをコピーする

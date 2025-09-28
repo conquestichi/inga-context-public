@@ -46,3 +46,10 @@ ingest → rule → decider → kpi → publish(oneshot) → GitHub
   - `PUBLISH_MIN_COUNT` `1`
   - `PUBLISH_FRESH_MAX_MIN` `240` (min)
   - `PUBLISH_IF_EMPTY` `skip|warn|fail`
+
+## 14. Publish プロファイル（prod/stg）
+- プロファイル: `/root/inkaritsu/config/hub_publish.{prod,stg}.env`
+- 実体: `hub_publish.env`（symlink）
+- 切替: `/root/bin/ink_hub_profile.sh {prod|stg}`
+- 参照先: `inkaritsu-hub-publish.service` drop-in `12-env.conf` 経由で読み込み
+- 反映コマンド: `/root/bin/ops.sh profile-hub stg` など
