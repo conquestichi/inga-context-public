@@ -130,3 +130,16 @@ tail -n 60 /tmp/slack.out
 
 nginx
 コードをコピーする
+
+### 通知の役割分岐（KPI/失敗）
+- KPI通知: `INK_KPI_DAILY_HOOK_URL` / `INK_KPI_WEEKLY_HOOK_URL` があれば優先。無ければ `INKARITSU_SLACK_WEBHOOK_URL` → さらに無ければ `/tmp/slack.out`。
+- 失敗通知: `INKARITSU_SLACK_WEBHOOK_ERR` を優先（無ければ通常Webhook→`/tmp/slack.out`）。  
+- 共通装飾: `INK_SLACK_PREFIX` / `INK_SLACK_MENTION` を先頭行に付与（任意）。
+
+#### 手動テスト
+bash /root/bin/ink_kpi_notify.sh daily --rich
+bash /root/bin/ink_kpi_notify.sh weekly --rich
+tail -n 50 /tmp/slack.out
+
+bash
+コードをコピーする
