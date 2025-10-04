@@ -1,0 +1,38 @@
+# KPI カタログ（ドラフト）
+trading_perf:
+  pnl_daily:
+    name: Daily PnL
+    window: 1d
+    unit: JPY
+    warn: -100000    # 例
+    crit: -300000
+  win_rate_30d:
+    name: Win Rate (30d)
+    window: 30d
+    unit: pct
+    warn: 45
+    crit: 35
+  sharpe_30d:
+    name: Sharpe (30d)
+    window: 30d
+    unit: ratio
+    warn: 0.5
+    crit: 0.0
+  max_drawdown_90d:
+    name: Max Drawdown (90d)
+    window: 90d
+    unit: pct
+    warn: -10
+    crit: -15
+  turnover_1d:
+    name: Turnover (1d)
+    window: 1d
+    unit: pct
+    warn: 300
+    crit: 500
+  slippage_bps_1d:
+    name: Slippage (1d)
+    window: 1d
+    unit: bps
+    warn: 10
+    crit: 20

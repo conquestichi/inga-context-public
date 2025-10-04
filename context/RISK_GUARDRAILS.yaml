@@ -1,0 +1,11 @@
+# リスク・ガードレール（ドラフト）
+limits:
+  max_daily_loss_pct: 3
+  max_drawdown_pct: 10
+  max_position_notional_jpy: 10000000
+  max_order_rate_per_min: 60
+  max_open_orders: 200
+trading_hours_jst:
+  - {market: TSE, start: "09:00", end: "15:00"}
+actions:
+  on_breach: ["halt_trading", "notify_slack", "require_manual_resume"]
