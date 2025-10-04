@@ -1,13 +1,31 @@
-# イベント → 通知マップ（ドラフト）
+# イベント→通知ルート（ブロック表記に統一）
 routes:
-  trading_ops: slack:trading-ops
-  risk_ops:    slack:risk-ops
-  infra_ops:   slack:infra-ops
+  trading_ops: "trading_ops"
+  risk_ops: "risk_ops"
+  infra_ops: "infra_ops"
+
 events:
-  order_filled:         {severity: info,    route: trading_ops, template: "Filled {symbol} {qty} @ {price}"}
-  order_rejected:       {severity: warn,    route: trading_ops, template: "Rejected {symbol} {qty} reason={reason}"}
-  risk_limit_breached:  {severity: critical,route: risk_ops,    template: "Risk breach {type}: {value} > {limit}"}
-  connectivity_down:    {severity: critical,route: infra_ops,   template: "Connectivity down {venue}"}
-  model_deployed:       {severity: info,    route: trading_ops, template: "Model deployed {model}@{sha}"}
-  model_rollback:       {severity: warn,    route: trading_ops, template: "Rollback to {sha} cause={cause}"}
-  audit_token_violation:{severity: critical,route: infra_ops,   template: "Secret token detected at {path}"}
+  order_filled:
+    severity: info
+    route: trading_ops
+    template: "Filled {symbol} {qty} @ {price}"
+  order_rejected:
+    severity: warn
+    route: trading_ops
+    template: "Rejected {symbol} {qty} reason={reason}"
+  connectivity_down:
+    severity: critical
+    route: infra_ops
+    template: "Connectivity down {venue}"
+  model_deployed:
+    severity: info
+    route: trading_ops
+    template: "Model deployed {model}@{sha}"
+  risk_limit_breached:
+    severity: critical
+    route: risk_ops
+    template: "Risk breach {type}: {value} > {limit}"
+  model_rollback:
+    severity: warn
+    route: trading_ops
+    template: "Rollback to {sha} cause={cause}"
