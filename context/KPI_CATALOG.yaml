@@ -1,10 +1,10 @@
-# KPI カタログ（ドラフト）
+# KPI カタログ（運用チューニング v0.1）
 trading_perf:
   pnl_daily:
     name: Daily PnL
     window: 1d
     unit: JPY
-    warn: -100000    # 例
+    warn: -100000
     crit: -300000
   win_rate_30d:
     name: Win Rate (30d)
