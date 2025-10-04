@@ -7,6 +7,8 @@ on:
 permissions:
   contents: write
   pull-requests: write
+env:
+  HAS_PAT: ${{ secrets.INK_CONTEXT_RW !=  }}
 jobs:
   build-summary:
     runs-on: ubuntu-latest
@@ -16,11 +18,17 @@ jobs:
         with: { python-version: "3.x" }
       - run: pip install pyyaml
       - run: python tools/build_context_md.py
-      - name: Create Pull Request
+      # PAT がある場合のみ PR を作成（なければ成功スキップ）
+      - name: Create Pull Request (with PAT)
+        if: env.HAS_PAT == true
         uses: peter-evans/create-pull-request@v6
         with:
+          token: ${{ secrets.INK_CONTEXT_RW }}
           commit-message: "chore(context): update auto README summary"
           branch: bot/update-context-summary
           title: "chore(context): update auto README summary"
           delete-branch: true
           add-paths: context/README.md
+      - name: Skip PR (no PAT)
+        if: env.HAS_PAT != true
+        run: echo "No PAT secret (INK_CONTEXT_RW). Skipping PR creation." && exit 0
