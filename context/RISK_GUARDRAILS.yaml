@@ -1,11 +1,12 @@
-# リスク・ガードレール（ドラフト）
+# 取引ガードレール（数値は v0.1 初期値）
 limits:
-  max_daily_loss_pct: 3
-  max_drawdown_pct: 10
-  max_position_notional_jpy: 10000000
-  max_order_rate_per_min: 60
-  max_open_orders: 200
-trading_hours_jst:
-  - {market: TSE, start: "09:00", end: "15:00"}
+  dd_90d: -12             # 90日最大DD[%]
+  daily_loss_jpy: -300000 # 1日損失上限[JPY]
+  turnover_1d_pct: 500    # 1日の売買回転[%]
+  exposure_jpy: 3000000   # 総エクスポージャ上限[JPY]
+  orders_per_min: 30      # 発注レート[件/分]
+  pos_count: 40           # 建玉数上限[銘柄]
 actions:
-  on_breach: ["halt_trading", "notify_slack", "require_manual_resume"]
+  on_breach:
+    - notify_slack
+    - halt_trading
