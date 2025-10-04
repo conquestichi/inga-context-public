@@ -4,8 +4,7 @@ BASE = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "context")
 def load_yaml(name):
     p = os.path.join(BASE, name)
     if not os.path.exists(p): return {}
-    with open(p, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f) or {}
+    with open(p, "r", encoding="utf-8") as f: return yaml.safe_load(f) or {}
 kpi  = load_yaml("KPI_CATALOG.yaml")
 evt  = load_yaml("EVENT_MAP.yaml")
 risk = load_yaml("RISK_GUARDRAILS.yaml")
@@ -21,11 +20,9 @@ if isinstance(kpi, dict):
         lines.append("|---|---|---|---|---:|---:|")
         if isinstance(items, dict):
             for k, d in items.items():
-                name   = (d or {}).get("name","")
-                window = (d or {}).get("window","")
-                unit   = (d or {}).get("unit","")
-                warn   = (d or {}).get("warn","")
-                crit   = (d or {}).get("crit","")
+                d = d or {}
+                name   = d.get("name",""); window = d.get("window",""); unit = d.get("unit","")
+                warn   = d.get("warn","");  crit   = d.get("crit","")
                 lines.append(f"| {g}.{k} | {name} | {window} | {unit} | {warn} | {crit} |")
 # EVENTS
 lines.append("\n## EVENTS")
@@ -37,8 +34,10 @@ lines.append("\n### events")
 lines.append("| name | severity | route | template |")
 lines.append("|---|---|---|---|")
 for en,e in events.items():
-    tmpl = str((e or {}).get("template","")).replace("|","\\|")
-    lines.append(f"| {en} | {(e or {}).get(severity,)} | {(e or {}).get(route,)} | {tmpl} |")
+    e = e or {}
+    sev  = e.get("severity",""); route = e.get("route","")
+    tmpl = str(e.get("template","")).replace("|","\\|")
+    lines.append(f"| {en} | {sev} | {route} | {tmpl} |")
 # RISK
 lines.append("\n## RISK_GUARDRAILS")
 limits = (risk or {}).get("limits", {}) or {}
