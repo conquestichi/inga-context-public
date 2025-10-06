@@ -5,6 +5,10 @@ routes:
   infra_ops: "infra_ops"
 
 events:
+  kpi_guardrail_breach:
+    severity: critical
+    route: trading_ops
+    template: "[CRITICAL][KPI] Guardrail breach: {msg}"
   order_filled:
     severity: info
     route: trading_ops
