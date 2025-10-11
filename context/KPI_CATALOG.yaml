@@ -36,3 +36,84 @@ trading_perf:
     unit: bps
     warn: 10
     crit: 20
+kpis:
+
+# --- 因果GPT: KPI entries (appended) ---
+  - id: content_to_pending_p95_sec
+    name: "HUB content→queue pending p95"
+    unit: "s"
+    target: "<=60"
+    direction: "lower_better"
+    description: "HUBの .content が agent_queue/pending に入るまでのp95（直近24h）"
+    owner: "sre"
+    source: "filetimes: /root/inkaritsu/memory/hub_jobs/incoming -> /root/inga-control/agent_queue/pending"
+    alert:
+      when: "p95 > 60 for 10m"
+      severity: "high"
+      channel: "slack"
+
+  - id: pending_to_result_p95_sec
+    name: "agent_queue pending→(done|failed) p95"
+    unit: "s"
+    target: "<=120"
+    direction: "lower_better"
+    description: "pending から done/failed までの p95（直近24h）"
+    owner: "sre"
+    source: "filetimes: /root/inga-control/agent_queue/{pending,done,failed,archiv*}"
+    alert:
+      when: "p95 > 120 for 10m"
+      severity: "high"
+      channel: "slack"
+
+  - id: autopull_push_success_rate_day
+    name: "autopull/autopush success rate (day)"
+    unit: "ratio"
+    target: ">=0.99"
+    direction: "higher_better"
+    description: "autopull.timer / autopush.timer の成功率（1日）"
+    owner: "ops"
+    source: "systemd/journal: inkaritsu-autopull.timer, inkaritsu-autopush.timer"
+    alert:
+      when: "rate < 0.99"
+      severity: "medium"
+      channel: "slack"
+
+  - id: guardrail_merge_success_rate_day
+    name: "guardrail merge success rate (day)"
+    unit: "ratio"
+    target: ">=0.99"
+    direction: "higher_better"
+    description: "gr-guardrail 実行の成功率（HTTP 200 / merged）"
+    owner: "ops"
+    source: "logs: /root/guardrail_logs/*merge*.log"
+    alert:
+      when: "rate < 0.99"
+      severity: "medium"
+      channel: "slack"
+
+  - id: runner_uptime_ratio_7d
+    name: "agent-runner uptime (7d)"
+    unit: "ratio"
+    target: ">=0.995"
+    direction: "higher_better"
+    description: "inkaritsu-agent-runner.{service,path} の有効稼働率（7日移動）"
+    owner: "sre"
+    source: "systemd: is-active + journal grep"
+    alert:
+      when: "uptime < 0.995"
+      severity: "high"
+      channel: "slack"
+
+  - id: queue_failed_jobs_24h
+    name: "failed jobs count (24h)"
+    unit: "count"
+    target: "<=3"
+    direction: "lower_better"
+    description: "24時間の failed 件数（再試行後に解消する小エラーを許容）"
+    owner: "sre"
+    source: "files: /root/inga-control/agent_queue/{failed,archiv*/*}"
+    alert:
+      when: "count > 3"
+      severity: "low"
+      channel: "slack"
+# --- 因果GPT: KPI entries end ---

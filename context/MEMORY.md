@@ -34,3 +34,40 @@
 - 監査: inkaritsu-slack-audit.timer（Sun 11:20 JST）
 - ヘルスチェック: /root/bin/ink_healthcheck.sh
 - 直接 curl の排除: 定期 grep 監査導入
+<!-- BEGIN 因果GPT-BOARD @ 2025-10-11 23:03:52 JST -->
+## 因果GPT: Task Board Snapshot (2025-10-11 23:03:52 JST)
+
+**現況**: Guardrail=OK / Runner=OK(`flock -w 5`) / Queue=pending0
+
+### Workstreams
+- WS-A 運用基盤（Ops/Runbook）
+- WS-B 観測とSLO（Observability/KPI）
+- WS-C エージェント契約（Agents/Contract）
+- WS-D 同期/ガードレール（Sync/Guardrail）
+- WS-E セキュリティ/鍵（Secrets/Keys）
+- WS-F ドキュメント/記憶（Docs/HUB）
+
+### タスク（ID / 概要 / 優先）
+- INK-A01: Runner OnFailure Slack 通報（高）
+- INK-A02: Queue ヘルス時系列 JSONL（中）
+- INK-A03: guardrail クリーン冪等化（中）
+- INK-A04: Ops コマンド固定化（中）
+- INK-B01: p95 指標（pending→result / content→pending）（高）
+- INK-B02: SLO 逸脱アラート（高）
+- INK-B03: 日次 digest 拡張（中）
+- INK-C01: payload schema v1 固定（高）
+- INK-C02: NG/OK スモーク標準化（中）
+- INK-C03: archived 階層規約（中）
+- INK-D01: gr-guardrail no-op & ログ整形（高）
+- INK-D02: behind 検出→update-branch リトライ（中）
+- INK-E01: DeployKey/PAT 満了監視（高）
+- INK-E02: 権限縮退検出（中）
+- INK-F01: HUB RAW優先ルールの明文化（高）
+- INK-F02: Runbook刷新（中）
+- INK-F03: インシデント記録テンプレ（中）
+
+**進行ステータス**
+- Doing: INK-A01 / INK-B01 / INK-D01 / INK-F01
+- Ready: INK-A03 / INK-B02 / INK-C01 / INK-F02
+- Icebox: INK-E02 / INK-C03
+<!-- END 因果GPT-BOARD @ 2025-10-11 23:03:52 JST -->
