@@ -49,6 +49,7 @@ kpis:
       severity: high
       channel: slack
     window: 24h
+    warn: p95 > 60 for 10m
   pending_to_result_p95_sec:
     name: agent_queue pending→(done|failed) p95
     unit: s
