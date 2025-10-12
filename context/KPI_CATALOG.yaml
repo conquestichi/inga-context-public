@@ -127,3 +127,4 @@ kpis:
     window: 24h
     warn: count > 0 for 1h
     crit: count > 10 for 30m
+# test: automerge check 2025-10-12T07:31:39Z
