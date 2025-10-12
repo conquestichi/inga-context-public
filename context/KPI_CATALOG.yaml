@@ -95,6 +95,8 @@ kpis:
       severity: medium
       channel: slack
     window: 1d
+    warn: rate < 0.99
+    crit: rate < 0.95
   runner_uptime_ratio_7d:
     name: agent-runner uptime (7d)
     unit: ratio
@@ -108,6 +110,8 @@ kpis:
       severity: high
       channel: slack
     window: 7d
+    warn: ratio < 0.95
+    crit: ratio < 0.90
   queue_failed_jobs_24h:
     name: failed jobs count (24h)
     unit: count
@@ -121,3 +125,5 @@ kpis:
       severity: low
       channel: slack
     window: 24h
+    warn: count > 0 for 1h
+    crit: count > 10 for 30m
