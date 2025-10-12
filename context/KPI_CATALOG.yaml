@@ -65,6 +65,8 @@ kpis:
       severity: high
       channel: slack
     window: 24h
+    warn: p95 > 90 for 10m
+    crit: p95 > 120 for 10m
   autopull_push_success_rate_day:
     name: autopull/autopush success rate (day)
     unit: ratio
