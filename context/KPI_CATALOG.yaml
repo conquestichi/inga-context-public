@@ -48,6 +48,7 @@ kpis:
       when: p95 > 60 for 10m
       severity: high
       channel: slack
+    window: 24h
   pending_to_result_p95_sec:
     name: agent_queue pending→(done|failed) p95
     unit: s
@@ -60,6 +61,7 @@ kpis:
       when: p95 > 120 for 10m
       severity: high
       channel: slack
+    window: 24h
   autopull_push_success_rate_day:
     name: autopull/autopush success rate (day)
     unit: ratio
@@ -72,6 +74,7 @@ kpis:
       when: rate < 0.99
       severity: medium
       channel: slack
+    window: 1d
   guardrail_merge_success_rate_day:
     name: guardrail merge success rate (day)
     unit: ratio
@@ -84,6 +87,7 @@ kpis:
       when: rate < 0.99
       severity: medium
       channel: slack
+    window: 1d
   runner_uptime_ratio_7d:
     name: agent-runner uptime (7d)
     unit: ratio
@@ -96,6 +100,7 @@ kpis:
       when: uptime < 0.995
       severity: high
       channel: slack
+    window: 7d
   queue_failed_jobs_24h:
     name: failed jobs count (24h)
     unit: count
@@ -108,3 +113,4 @@ kpis:
       when: count > 3
       severity: low
       channel: slack
+    window: 24h
