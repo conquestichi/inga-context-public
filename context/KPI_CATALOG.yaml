@@ -80,6 +80,8 @@ kpis:
       severity: medium
       channel: slack
     window: 1d
+    warn: rate < 98% for 1d
+    crit: rate < 95% for 1d
   guardrail_merge_success_rate_day:
     name: guardrail merge success rate (day)
     unit: ratio
