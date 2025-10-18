@@ -1,43 +1,31 @@
-name: ci(ops): auto label SAFE for guardrail PRs
-
+name: ci(ops): auto label SAFE
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-
 permissions:
   contents: read
   pull-requests: write
-
 jobs:
   label-safe:
-    if: >
-      github.repository == "conquestichi/inga-context-public" &&
-      startsWith(github.head_ref, ops/fix-kpi-warn-)
+    if: ${{ github.repository_owner == "conquestichi" }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check changed files & label SAFE
-        uses: actions/github-script@v7
+      - uses: actions/github-script@v7
         with:
           script: |
-            const owner = context.repo.owner;
-            const repo  = context.repo.repo;
-            const pr    = context.payload.pull_request.number;
-
-            // 変更ファイル取得
-            const { data: files } = await github.rest.pulls.listFiles({
-              owner, repo, pull_number: pr, per_page: 100
-            });
-
-            // KPI_CATALOG.yaml のみなら SAFE 付与
-            const onlyCatalog =
-              files.length === 1 && files[0].filename === "context/KPI_CATALOG.yaml";
-
-            if (!onlyCatalog) {
-              core.info("Skip: not catalog-only change");
-              return;
+            const {owner, repo} = context.repo;
+            const pr = context.payload.pull_request.number;
+            // 変更ファイルが .github/workflows/ のみ なら SAFE を付与
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              { owner, repo, pull_number: pr, per_page: 100 }
+            );
+            const onlyWorkflows = files.every(f => f.filename.startsWith(".github/workflows/"));
+            if (onlyWorkflows) {
+              await github.rest.issues.addLabels({
+                owner, repo, issue_number: pr, labels: ["安全"]
+              });
+              core.info("Labeled SAFE");
+            } else {
+              core.info("Skip: not workflows-only change");
             }
-
-            await github.rest.issues.addLabels({
-              owner, repo, issue_number: pr, labels: ["安全"]
-            });
-            core.info(`Labeled PR #${pr} with 安全`);
