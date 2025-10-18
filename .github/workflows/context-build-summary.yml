@@ -1,9 +1,7 @@
 name: context-build-summary
 on:
-  push:
-    branches: [ "main" ]
-    paths: [ "context/**", "tools/build_context_md.py", ".github/workflows/context-build-summary.yml" ]
   workflow_dispatch: {}
+  pull_request: {}
 permissions:
   contents: write
   pull-requests: write
@@ -13,22 +11,22 @@ jobs:
   build-summary:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.x" }
-      - run: pip install pyyaml
-      - run: python tools/build_context_md.py
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with: {python-version: "3.x"}
+    - run: pip install pyyaml
+    - run: python tools/build_context_md.py
       # PAT がある場合のみ PR を作成（なければ成功スキップ）
-      - name: Create Pull Request (with PAT)
-        if: env.HAS_PAT == true
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.INK_CONTEXT_RW }}
-          commit-message: "chore(context): update auto README summary"
-          branch: bot/update-context-summary
-          title: "chore(context): update auto README summary"
-          delete-branch: true
-          add-paths: context/README.md
-      - name: Skip PR (no PAT)
-        if: env.HAS_PAT != true
-        run: echo "No PAT secret (INK_CONTEXT_RW). Skipping PR creation." && exit 0
+    - name: Create Pull Request (with PAT)
+      if: env.HAS_PAT == true
+      uses: peter-evans/create-pull-request@v6
+      with:
+        token: ${{ secrets.INK_CONTEXT_RW }}
+        commit-message: "chore(context): update auto README summary"
+        branch: bot/update-context-summary
+        title: "chore(context): update auto README summary"
+        delete-branch: true
+        add-paths: context/README.md
+    - name: Skip PR (no PAT)
+      if: env.HAS_PAT != true
+      run: echo "No PAT secret (INK_CONTEXT_RW). Skipping PR creation." && exit 0

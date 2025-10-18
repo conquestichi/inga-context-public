@@ -1,16 +1,14 @@
 name: context-validate
 on:
   pull_request:
-    paths: [ "context/**", "tools/**", ".github/workflows/context-validate.yml" ]
-  push:
-    branches: [ "**" ]
-    paths: [ "context/**", "tools/**", ".github/workflows/context-validate.yml" ]
+    paths: ["context/**", "tools/**", ".github/workflows/context-validate.yml"]
+  workflow_dispatch: {}
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.x" }
-      - run: pip install pyyaml
-      - run: python tools/validate_context.py
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with: {python-version: "3.x"}
+    - run: pip install pyyaml
+    - run: python tools/validate_context.py
