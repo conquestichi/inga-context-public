@@ -1,0 +1,14 @@
+name: ensure: SAFE label
+on: { pull_request: {} }
+permissions: { contents: read, pull-requests: write }
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(l => l.name);
+            if (!labels.includes("安全")) {
+              core.setFailed("このPRをマージするには『安全』ラベルが必要です。");
+            }
