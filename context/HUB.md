@@ -4,6 +4,8 @@
 ## 索引
 - [ツール（Agentモード）](tools/)
 - [運用Runbook](docs/ops/AGENT_MODE.md)
+- [ツール（Agentモード）](tools/)
+- [運用Runbook](docs/ops/AGENT_MODE.md)
 - [因果記憶（要約）](MEMORY.md)
 - [KPI辞書](KPI_CATALOG.yaml)
 - [イベント→通知マップ](EVENT_MAP.yaml)
