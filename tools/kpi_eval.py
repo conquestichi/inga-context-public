@@ -1,4 +1,5 @@
 # --- below: real implementation (part1) ---
+import os, sys, json, re, argparse, pathlib, subprocess, datetime
 import re, datetime, argparse, pathlib, subprocess
 def parse_kpi_catalog(path:str):
     items, cur = {}, None
