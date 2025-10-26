@@ -1,5 +1,5 @@
-#!/usr/bin/env python3
-import sys, json, re, os, datetime, argparse, pathlib, subprocess
+# --- below: real implementation (part1) ---
+import re, datetime, argparse, pathlib, subprocess
 def parse_kpi_catalog(path:str):
     items, cur = {}, None
     for raw in open(path, encoding="utf-8"):
@@ -21,10 +21,8 @@ def eval_status(value,warn,crit,direction):
     if value is None: return "unknown"
     try:
         v=float(value); w=float(warn); c=float(crit)
-        if direction=="lower_worse":
-            return "crit" if v<=c else ("warn" if v<=w else "ok")
-        else:
-            return "crit" if v>=c else ("warn" if v>=w else "ok")
+        if direction=="lower_worse":   return "crit" if v<=c else ("warn" if v<=w else "ok")
+        else:                          return "crit" if v>=c else ("warn" if v>=w else "ok")
     except: return "unknown"
 def iso_now(): return datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds")
 def detect_queue_root(default="/root/inga-control/agent_queue"):
@@ -48,18 +46,16 @@ def main():
     res={}
     for k,meta in cat.items():
         w, c = meta.get("warn"), meta.get("crit")
-        dirc = infer_direction(w,c)
-        val = met.get(k,None)
+        dirc = infer_direction(w,c); val = met.get(k,None)
         res[k]={ "name": meta.get("name",k), "value": val, "unit": meta.get("unit"),
                  "window": meta.get("window"), "warn": w, "crit": c,
                  "direction": dirc, "status": eval_status(val,w,c,dirc) }
     asof=iso_now(); out={"asof":asof,"results":res,"catalog_path":os.path.abspath(a.catalog),"metrics_path":os.path.abspath(a.metrics)}
+    json.dump(out, open(a.out,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
     print(f"== KPI evaluation @ {asof} ==")
     for k,v in res.items():
         u="" if v["unit"] is None else f" {v['unit']}"
         print(f"- {k:18s}: {str(v['value'])}{u} -> {v['status'].upper()} (warn={v['warn']}, crit={v['crit']}, dir={v['direction']})")
-    pathlib.Path(os.path.dirname(a.out)).mkdir(parents=True, exist_ok=True)
-    json.dump(out, open(a.out,"w",encoding="utf-8"), ensure_ascii=False, indent=2)
     if a.emit_pending:
         qroot=a.queue_root or detect_queue_root(); pen=os.path.join(qroot,"pending")
         pathlib.Path(pen).mkdir(parents=True, exist_ok=True); cnt=0

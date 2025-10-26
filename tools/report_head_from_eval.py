@@ -16,8 +16,8 @@ TPL = """# Inga Daily Report ({date})
 - generated_from: {eval_path}
 """
 def main():
-    if len(sys.argv)<3: sys.exit("usage: report_head_from_eval.py <eval.json> <report.md>")
-    ev, rpt = sys.argv[1], sys.argv[2]
+    if len(sys.argv)<2: sys.exit(2)
+    ev=sys.argv[1]; rpt=sys.argv[2] if len(sys.argv)>2 else f"/root/inga-control/docs/agent-reports/{datetime.date.today().isoformat()}.md"
     R=json.load(open(ev,encoding="utf-8"))["results"]
     gv=lambda k: "-" if R.get(k,{}).get("value") is None else R[k]["value"]
     gs=lambda k: R.get(k,{}).get("status","unknown").upper()
@@ -30,6 +30,6 @@ def main():
         turnover_1d=gv("turnover_1d"), turn_status=gs("turnover_1d"),
         slip_bps_1d=gv("slippage_bps_1d"), slip_status=gs("slippage_bps_1d"))
     p=pathlib.Path(rpt); p.parent.mkdir(parents=True, exist_ok=True)
-    old=p.read_text(encoding="utf-8") if p.exists() else ""
-    p.write_text(head+"\n---\n"+old, encoding="utf-8"); print(f"[report] written: {p}")
+    old=p.read_text(utf-8) if False else (p.read_text(encoding="utf-8") if p.exists() else "")
+    p.write_text(head+"\n---\n"+old, encoding="utf-8"); print(f"[report] {p}")
 if __name__=="__main__": main()
