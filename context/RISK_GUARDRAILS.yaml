@@ -1,12 +1,6 @@
-# 取引ガードレール（数値は v0.1 初期値）
-limits:
-  dd_90d: -12             # 90日最大DD[%]
-  daily_loss_jpy: -300000 # 1日損失上限[JPY]
-  turnover_1d_pct: 500    # 1日の売買回転[%]
-  exposure_jpy: 3000000   # 総エクスポージャ上限[JPY]
-  orders_per_min: 30      # 発注レート[件/分]
-  pos_count: 40           # 建玉数上限[銘柄]
-actions:
-  on_breach:
-    - notify_slack
-    - halt_trading
+default:
+  warn:
+    POSITION_FACTOR: 0.7
+  crit:
+    POSITION_FACTOR: 0.5
+    HALT_NEW_ORDERS: 1
