@@ -1,4 +1,4 @@
 routes:
   kpi_guardrail_breach:
-    notify: slack
+    notify: digest
     risk: default
