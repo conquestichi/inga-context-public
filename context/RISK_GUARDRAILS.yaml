@@ -1,6 +1,21 @@
-default:
-  warn:
-    POSITION_FACTOR: 0.7
-  crit:
-    POSITION_FACTOR: 0.5
-    HALT_NEW_ORDERS: 1
+# ルールは上から順に上書き適用（baseline → defaults → rules）
+defaults:
+  POSITION_FACTOR: "1.0"
+  HALT_NEW_ORDERS: "0"
+
+rules:
+  # 全体がCRITの時は最低0.5まで絞る（baselineは 0.5 を採用）
+  - match: {status: crit}
+    set:   {POSITION_FACTOR: "0.5"}
+
+  # pnl_daily が CRIT なら新規発注STOP
+  - match: {kpi: pnl_daily, status: crit}
+    set:   {HALT_NEW_ORDERS: "1"}
+
+  # max_drawdown が CRIT ならより強く絞る
+  - match: {kpi: max_drawdown_90d, status: crit}
+    set:   {POSITION_FACTOR: "0.5"}
+
+  # win_rate が WARN の間は少しだけ絞る
+  - match: {kpi: win_rate_30d, status: warn}
+    set:   {POSITION_FACTOR: "0.7"}
