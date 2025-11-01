@@ -1,35 +1,4 @@
-# イベント→通知ルート（ブロック表記に統一）
 routes:
-  trading_ops: "trading_ops"
-  risk_ops: "risk_ops"
-  infra_ops: "infra_ops"
-
-events:
   kpi_guardrail_breach:
-    severity: critical
-    route: trading_ops
-    template: "[CRITICAL][KPI] Guardrail breach: {msg}"
-  order_filled:
-    severity: info
-    route: trading_ops
-    template: "Filled {symbol} {qty} @ {price}"
-  order_rejected:
-    severity: warn
-    route: trading_ops
-    template: "Rejected {symbol} {qty} reason={reason}"
-  connectivity_down:
-    severity: critical
-    route: infra_ops
-    template: "Connectivity down {venue}"
-  model_deployed:
-    severity: info
-    route: trading_ops
-    template: "Model deployed {model}@{sha}"
-  risk_limit_breached:
-    severity: critical
-    route: risk_ops
-    template: "Risk breach {type}: {value} > {limit}"
-  model_rollback:
-    severity: warn
-    route: trading_ops
-    template: "Rollback to {sha} cause={cause}"
+    notify: digest
+    risk: default
