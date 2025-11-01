@@ -1,0 +1,12 @@
+{
+  "type":"object","additionalProperties":false,
+  "required":["pnl_daily","win_rate_30d","sharpe_30d","max_drawdown_90d","turnover_1d","slippage_bps_1d"],
+  "properties":{
+    "pnl_daily":{"type":"number"},
+    "win_rate_30d":{"type":"number"},
+    "sharpe_30d":{"type":"number"},
+    "max_drawdown_90d":{"type":"number"},
+    "turnover_1d":{"type":"number"},
+    "slippage_bps_1d":{"type":"number"}
+  }
+}
