@@ -1,7 +1,7 @@
-routes:
-  kpi_guardrail_breach:
-    notify: digest
-    risk: default
-  kpi_guardrail_recover:
-    notify: digest
-    risk: default
+kpi_guardrail_breach:
+  severity: critical
+  owner: trading_ops
+  routes:
+    - type: slack
+      channel: '#trading-ops-critical'
+      template: 'INGA: [CRIT] {{kpi}} breach: value={{value}} (warn={{warn}}/crit={{crit}}) window={{window}} at {{ts}}'
